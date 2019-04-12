@@ -1,0 +1,558 @@
+.rnd {
+  width: 100%;
+  height: 100%;
+  background-color: 'transparent'
+}
+.rnd-container{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  text-align: center;
+}
+.rnd_evaluate{
+  position: absolute;
+  display: inline-block;
+  left: 0;
+  top: 50px;
+  overflow: hidden;
+}
+.rnd-container:before{
+  content: "";
+    display: inline-block;
+    height: 50%;
+    width: 1px;
+    margin-right: -1px;
+}
+.rnd-mask{
+  /* display: inline-block; */
+  /* display: table; */
+    margin: 0 auto;
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 50%;
+    max-height: 50%;
+    background-size: contain!important;
+    background-position: center!important;
+    background-repeat: no-repeat !important;
+    position: relative;
+}
+.object-title{
+  position: relative;
+  top: -25px;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.object{
+ width: 40%;
+ background-color: orange
+}
+.title{
+ width: 40%;
+ background-color: #61dafb
+}
+.close{
+  width: 20%;
+  background-color: black;
+  color: white
+}
+.details{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  top: -25px;
+}
+.react-image-viewer .image-outer.zoom-1 .rnd-mask {
+  transform: scale3d(1.5, 1.5, 1);
+  -webkit-transform: scale3d(1.5, 1.5, 1);
+}
+.react-image-viewer .image-outer.zoom-2 .rnd-mask  {
+  transform: scale3d(2, 2, 1);
+  -webkit-transform: scale3d(2, 2, 1);
+}
+.react-image-viewer .image-outer.zoom-3 .rnd-mask {
+  transform: scale3d(2.5, 2.5, 1);
+  -webkit-transform: scale3d(2.5, 2.5, 1);
+}
+.react-image-viewer .image-outer.zoom-4 .rnd-mask {
+  transform: scale3d(3, 3, 1);
+  -webkit-transform: scale3d(3, 3, 1);
+}
+.react-image-viewer .image-outer.zoom-5 .rnd-mask {
+  transform: scale3d(3.5, 3.5, 1);
+  -webkit-transform: scale3d(3.5, 3.5, 1);
+}
+.react-image-viewer .image-outer.zoom-6 .rnd-mask {
+  transform: scale3d(4, 4, 1);
+  -webkit-transform: scale3d(4, 4, 1);
+}
+.react-image-viewer .image-outer.zoom-7 .rnd-mask {
+  transform: scale3d(4.5, 4.5, 1);
+  -webkit-transform: scale3d(4.5, 4.5, 1);
+}
+.react-image-viewer .image-outer.zoom-8 .rnd-mask {
+  transform: scale3d(5, 5, 1);
+  -webkit-transform: scale3d(5, 5, 1);
+}
+.react-image-viewer .image-outer.zoom-9 .rnd-mask {
+  transform: scale3d(5.5, 5.5 1);
+  -webkit-transform: scale3d(5.5, 5.5, 1);
+}
+.react-image-viewer .image-outer.zoom-10 .rnd-mask {
+  transform: scale3d(6, 6, 1);
+  -webkit-transform: scale3d(6, 6, 1);
+}
+.react-draggable{
+  position: absolute !important;
+  display: block !important;
+}
+
+
+
+
+
+
+
+
+.react-image-viewer {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+.react-image-viewer .button-group {
+  float: right;
+  margin-right: 4rem;
+}
+.react-image-viewer .button-group .button {
+  position: relative;
+  display: block;
+  text-align: center;
+  float: left;
+  cursor: pointer;
+  -webkit-transition: all .4s ease;
+  transition: all .4s ease;
+}
+.react-image-viewer .button-group .button:hover {
+  opacity: .8;
+}
+.react-image-viewer .prev-button,
+.react-image-viewer .next-button {
+  position: fixed;
+  line-height: 80vh;
+  background: none;
+  border: none;
+  top: 10vh;
+  padding: 0;
+  color: #fff;
+  cursor: pointer;
+  opacity: .4;
+  -webkit-transition: all .4s ease;
+  transition: all .4s ease;
+}
+.react-image-viewer .prev-button:hover,
+.react-image-viewer .next-button:hover {
+  opacity: .8;
+}
+.react-image-viewer .prev-button {
+  left: 0;
+}
+.react-image-viewer .next-button {
+  right: 0;
+}
+.react-image-viewer .image-wrapper {
+  position: relative;
+  width: 92vw;
+  height: 92vh;
+  margin: 4vh 4vw;
+  overflow: hidden;
+}
+.react-image-viewer .image-outer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  text-align: center;
+  transition: all .35s ease;
+  -webkit-transition: all .35s ease;
+  cursor: move;
+  overflow: unset;
+}
+.react-image-viewer .image-outer.dragging {
+  transition: all 0s ease;
+  -webkit-transition: all 0s ease;
+}
+.react-image-viewer .image-outer:before {
+  content: "";
+  display: inline-block;
+  height: 50%;
+  width: 1px;
+  margin-right: -1px;
+}
+.react-image-viewer .image-outer .image {
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 50%;
+  max-height: 50%;
+  width: auto !important;
+  height: auto !important;
+  /* width: 100% !important;
+  height: 100% !important; */
+  background-size: contain!important;
+  background-position: center!important;
+  background-repeat: no-repeat !important;
+  transform: scale3d(1, 1, 1);
+  -webkit-transform: scale3d(1, 1, 1);
+  transition: all .4s ease;
+  -webkit-transition: all .4s ease;
+  animation: image-fade-in 0.4s ease;
+  -webkit-animation: image-fade-in 0.4s ease;
+}
+.react-image-viewer .image-outer.zoom-0 {
+  cursor: default;
+}
+.react-image-viewer .image-outer.zoom-1 .image {
+  transform: scale3d(1.5, 1.5, 1);
+  -webkit-transform: scale3d(1.5, 1.5, 1);
+}
+.react-image-viewer .image-outer.zoom-2 .image {
+  transform: scale3d(2, 2, 1);
+  -webkit-transform: scale3d(2, 2, 1);
+}
+.react-image-viewer .image-outer.zoom-3 .image {
+  transform: scale3d(2.5, 2.5, 1);
+  -webkit-transform: scale3d(2.5, 2.5, 1);
+}
+.react-image-viewer .image-outer.zoom-4 .image {
+  transform: scale3d(3, 3, 1);
+  -webkit-transform: scale3d(3, 3, 1);
+}
+.react-image-viewer .image-outer.zoom-5 .image {
+  transform: scale3d(3.5, 3.5, 1);
+  -webkit-transform: scale3d(3.5, 3.5, 1);
+}
+.react-image-viewer .image-outer.zoom-6 .image {
+  transform: scale3d(4, 4, 1);
+  -webkit-transform: scale3d(4, 4, 1);
+}
+.react-image-viewer .image-outer.zoom-7 .image {
+  transform: scale3d(4.5, 4.5, 1);
+  -webkit-transform: scale3d(4.5, 4.5, 1);
+}
+.react-image-viewer .image-outer.zoom-8 .image {
+  transform: scale3d(5, 5, 1);
+  -webkit-transform: scale3d(5, 5, 1);
+}
+.react-image-viewer .image-outer.zoom-9 .image {
+  transform: scale3d(5.5, 5.5 1);
+  -webkit-transform: scale3d(5.5, 5.5, 1);
+}
+.react-image-viewer .image-outer.zoom-10 .image {
+  transform: scale3d(6, 6, 1);
+  -webkit-transform: scale3d(6, 6, 1);
+}
+
+.react-image-viewer .tool-bar {
+  height: 4rem;
+  width: 100vw;
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding-right: 4rem;
+  line-height: 4rem;
+  opacity: .5;
+  background: rgba(0, 0, 0, 0);
+  transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out;
+  min-width: 16rem;
+  overflow: hidden;
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.7);
+}
+.react-image-viewer .tool-bar:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.7);
+}
+.react-image-viewer .index-indicator,
+.react-image-viewer .caption {
+  float: left;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1rem;
+  font-weight: lighter;
+  padding-left: 1.4rem;
+  line-height: 4rem;
+  vertical-align: middle;
+  margin: 0;
+}
+.react-image-viewer .caption {
+  max-width: 60vw;
+  overflow: hidden;
+}
+.react-image-viewer .image-info {
+  position: absolute;
+  bottom: 2rem;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  line-height: 1.4rem;
+  font-size: .9rem;
+  font-weight: lighter;
+  color: rgba(255, 255, 255, 0.6);
+}
+.react-image-viewer .indicators {
+  position: fixed;
+  left: 0;
+  bottom: 1rem;
+  width: 100vw;
+  height: 3rem;
+  min-width: 30rem;
+  overflow: hidden;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+.react-image-viewer .indicators-item {
+  position: relative;
+  width: 4rem;
+  max-width: 10vw;
+  height: 3rem;
+  margin: 0 .3rem;
+  float: left;
+  line-height: 3rem;
+  opacity: .25;
+  cursor: pointer;
+  transition: all .4s ease;
+  -webkit-transition: all .4s ease;
+}
+.react-image-viewer .indicators-item:first-child:after,
+.react-image-viewer .indicators-item:last-child:after {
+  position: absolute;
+  content: "";
+  display: inline-block;
+  height: .4rem;
+  width: .4rem;
+  border-radius: 4rem;
+  background: #2cb7f5;
+  top: 1.4rem;
+  opacity: 0;
+  transform: scale(0);
+  -webkit-transform: scale(0);
+  transition: all .6s ease;
+  -webkit-transition: all .6s ease;
+}
+.react-image-viewer .indicators-item:first-child.invisible:after,
+.react-image-viewer .indicators-item:last-child.invisible:after {
+  opacity: 1;
+  transform: scale(1);
+  -webkit-transform: scale(1);
+}
+.react-image-viewer .indicators-item:first-child:after {
+  left: -1rem;
+}
+.react-image-viewer .indicators-item:last-child:after {
+  right: -1rem;
+}
+.react-image-viewer .indicators-item.invisible {
+  width: 0;
+  margin: 0;
+}
+.react-image-viewer .indicators-item:before {
+  content: "";
+  display: inline-block;
+  height: .3rem;
+  width: 100%;
+  border-radius: 5rem;
+  background: #2cb7f5;
+}
+.react-image-viewer .indicators-item.active,
+.react-image-viewer .indicators-item:hover {
+  opacity: .85!important;
+}
+.react-image-viewer .indicators-item.preview {
+  border: 1px solid #eee;
+  opacity: .5;
+  box-sizing: border-box;
+}
+.react-image-viewer .indicators-item.preview.active,
+.react-image-viewer .indicators-item.preview:hover {
+  border: 1px solid #2cb7f5;
+}
+.react-image-viewer .indicators-item.preview:first-child:after,
+.react-image-viewer .indicators-item.preview:last-child:after {
+  content: '';
+  display: inline-block;
+  height: 2rem;
+  width: .1rem;
+  background: rgba(255, 255, 255, 0.8);
+  position: absolute;
+  top: .5rem;
+  opacity: 0;
+  transform: scaleY(0);
+  -webkit-transform: scaleY(0);
+  transition: all .6s ease;
+  -webkit-transition: all .6s ease;
+}
+.react-image-viewer .indicators-item.preview:first-child.invisible:after,
+.react-image-viewer .indicators-item.preview:last-child.invisible:after {
+  opacity: 1;
+  transform: scaleY(1);
+  -webkit-transform: scaleY(1);
+}
+.react-image-viewer .indicators-item.preview.invisible {
+  border: none!important;
+}
+.react-image-viewer .indicators-item.preview:before {
+  display: none;
+}
+.react-image-viewer .indicators-item.preview .image {
+  width: 100%;
+  height: 100%;
+  background-size: cover!important;
+  background-position: center!important;
+  overflow: hidden;
+}
+.react-image-viewer .spinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+}
+.react-image-viewer .spinner:before {
+  content: "";
+  display: inline-block;
+  height: 50%;
+  width: 1px;
+  margin-right: -1px;
+}
+.react-image-viewer .direction-control-button .button .bar {
+  width: 4rem;
+  height: 4rem;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+}
+.react-image-viewer .direction-control-button .button .bar:before,
+.react-image-viewer .direction-control-button .button .bar:after {
+  content: '';
+  position: absolute;
+  height: 2rem;
+  width: .12rem;
+  left: 1rem;
+  top: 0;
+  background-color: #fff;
+  -webkit-transform-origin: 0 100%;
+  transform-origin: 0 100%;
+}
+.react-image-viewer .direction-control-button .button .bar:before {
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.react-image-viewer .direction-control-button .button .bar:after {
+  -webkit-transform: rotate(135deg);
+  transform: rotate(135deg);
+}
+.react-image-viewer .direction-control-button .next-button .bar {
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+.react-image-viewer .button-group .button {
+  width: 2rem;
+  height: 2rem;
+  text-align: center;
+  margin: .86rem 1rem;
+  opacity: .5;
+  border: .14rem solid #fff;
+  border-radius: 50%;
+}
+.react-image-viewer .button-group .button:before,
+.react-image-viewer .button-group .button:after {
+  content: '';
+  display: block;
+  position: absolute;
+  height: 1.6rem;
+  width: .12rem;
+  top: .2rem;
+  left: .94rem;
+  background-color: #fff;
+  border-radius: 2rem;
+  -webkit-transform-origin: center;
+  transform-origin: center;
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+.react-image-viewer .button-group .zoom-in:after {
+  -webkit-transform: rotate(0deg);
+  transform: rotate(0deg);
+}
+.react-image-viewer .bounce {
+  width: 2.4rem;
+  height: 2.4rem;
+  display: inline-block;
+  position: relative;
+}
+.react-image-viewer .bounce:before,
+.react-image-viewer .bounce:after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: .5;
+  border-radius: 50%;
+  background-color: #2cb7f5;
+  -webkit-animation: bounce 2s infinite ease-in-out;
+  animation: bounce 2s infinite ease-in-out;
+}
+.react-image-viewer .bounce:after {
+  -webkit-animation-delay: -1s;
+  animation-delay: -1s;
+}
+@keyframes bounce {
+  0%,
+  100% {
+    -webkit-transform: scale(0);
+  }
+  50% {
+    -webkit-transform: scale(1);
+  }
+}
+@-webkit-keyframes bounce {
+  0%,
+  100% {
+    -webkit-transform: scale(0);
+  }
+  50% {
+    -webkit-transform: scale(1);
+  }
+}
+@keyframes image-fade-in {
+  0% {
+    opacity: .75;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes image-fade-in {
+  0% {
+    opacity: .75;
+  }
+  100% {
+    opacity: 1;
+  }
+}
