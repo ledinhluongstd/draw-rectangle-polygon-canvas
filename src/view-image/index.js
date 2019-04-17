@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import ImageWrapper from './image-wrapper'
+//import ImageWrapper from './image-wrapper-3' // làm cái vụ resize khi click
+//import ImageWrapper from './image-wrapper-rnd' // xong cái vụ thêm sửa xóa
+import ImageWrapper from './image-wrapper-canvas'
 const constants_1 = require("./constants");
 
 // class ImageWrapper extends React.Component {

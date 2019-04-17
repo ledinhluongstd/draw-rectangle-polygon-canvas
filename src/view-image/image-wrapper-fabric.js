@@ -2,6 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Rnd } from "react-rnd";
 import ReactDOM from 'react-dom';
+
+//import Canvas from './canvas'
+import Canvas from './canvas-fabricjs' // vẽ bằng thư viện fabricjs
+//import Canvas from './canvas-polygon' // vẽ polygon ok
+//import Canvas from './canvas-rectangle' // vẽ rectangle ok
+//import Canvas from './canvas-polygon-reactangle' // vẽ polygon và rectangle ok
+
 const constants_1 = require("./constants");
 const style = {
   display: "flex",
@@ -17,22 +24,11 @@ class ImageWrapper extends React.Component {
       onload: false,
       zoom: 0,
       offset: constants_1.OFFSET_DEFAULT,
-      rnd: [],
-      rnd_width_const: 120,
-      rnd_height_const: 100,
-      rnd_mask_width: 0,
-      rnd_mask_height: 0,
       addNote: false,
-      enableResizing: {
-        bottom: true,
-        bottomLeft: true,
-        bottomRight: true,
-        left: true,
-        right: true,
-        top: true,
-        topLeft: true,
-        topRight: true
-      }
+      drawType: 'RECTANGLE',
+      enabledCanvas: false,
+      lineData: [],
+      activeIndex: -1,
     };
     this.draggable = false;
     this.offsetRange = constants_1.OFFSET_DEFAULT;
@@ -96,6 +92,7 @@ class ImageWrapper extends React.Component {
     this.setOffsetRange();
   }
   onMoveStart(e) {
+    if (this.state.enabledCanvas) return
     if (!this.offsetRange.x && !this.offsetRange.y) {
       return;
     }
@@ -106,6 +103,7 @@ class ImageWrapper extends React.Component {
     this.draggable = true;
   }
   onMove(e) {
+    if (this.state.enabledCanvas) return
     if (!e.clientX && !e.clientY || !this.draggable) {
       return;
     }
@@ -124,6 +122,7 @@ class ImageWrapper extends React.Component {
     this.setState(this.state);
   }
   onMoveEnd(e) {
+    if (this.state.enabledCanvas) return
     if (!this.mounted)
       return;
     this.draggable = false;
@@ -151,6 +150,7 @@ class ImageWrapper extends React.Component {
       });
     }
   }
+
   componentDidMount() {
     this.loadDataRnd(this.props.image.src)
     this.mounted = true;
@@ -166,19 +166,7 @@ class ImageWrapper extends React.Component {
     window.removeEventListener('resize', this.setOffsetRange.bind(this));
     document.documentElement.removeEventListener("mouseup", this.onMoveEnd.bind(this));
   }
-  onRndResize(e, direction, ref, delta, position, index) {
-    this.state.rnd[index].position.width = ref.offsetWidth
-    this.state.rnd[index].position.height = ref.offsetHeight
-    this.forceUpdate()
-  }
-  onRndDragStop(e, d, index) {
-    this.state.rnd[index].position.x = d.x
-    this.state.rnd[index].position.y = d.y
-    this.forceUpdate()
-  }
-  onRndDragStart(SyntheticMouseEvent, data, index) {
-//console.log(data)
-  }
+
   onMouseDown(e) {
     if (!this.state.addNote) {
       this.onMoveStart(e)
@@ -191,54 +179,57 @@ class ImageWrapper extends React.Component {
     this.forceUpdate()
   }
   save() {
-    localStorage.setItem(this.props.image.src + "rnd", JSON.stringify(this.state.rnd));
+    localStorage.setItem(this.props.image.src + "rnd-2", JSON.stringify(this.state.lineData));
   }
   delete(index) {
-    this.state.rnd.splice(index, 1)
+    this.state.lineData.splice(index, 1)
+    //this.state.dataChange = !this.state.dataChange
     this.forceUpdate()
   }
   loadDataRnd(src) {
-    this.state.rnd = []
+    this.state.lineData = []
     this.forceUpdate()
-    let rnd = localStorage.getItem(src + "rnd")
-    if (!rnd) return
-    this.state.rnd = JSON.parse(rnd)
+    let rndStorage = localStorage.getItem(src + "rnd-2")
+    if (!rndStorage) return
+    this.state.lineData = JSON.parse(rndStorage)
     this.forceUpdate()
   }
-  changeElement(e, index) {
-    this.state.rnd[index].evaluate = e.target.value
+  changeElement(e, random) {
+
   }
   onMouseClick(e) {
-    const { rnd_width_const, rnd_height_const } = this.state
-    const rndMask = ReactDOM.findDOMNode(this.refs['rnd-mask'])
-    const imageWrapper = ReactDOM.findDOMNode(this.refs['image-wrapper'])
-    const offsetLeft = rndMask.offsetLeft + imageWrapper.offsetLeft
-    const offsetTop = rndMask.offsetTop + imageWrapper.offsetTop
-    let rnd_x = e.clientX  - (offsetLeft)// + (this.image.width * this.state.zoom )
-    let rnd_y = e.clientY - (offsetTop) //+(this.image.height * this.state.zoom )
-    let position = {
-      width: rnd_width_const,
-      height: rnd_height_const,
-      x: rnd_x,
-      y: rnd_y
-    }
-    this.state.rnd.push({
-      position: position,
-      //evaluate: evaluate
-    })
-    this.state.addNote = false
+
+  }
+  drawRectangle() {
+    this.state.drawType = 'RECTANGLE'
+    this.state.enabledCanvas = true
+    this.forceUpdate()
+  }
+  drawPolygon() {
+    this.state.drawType = 'POLYGON'
+    this.state.enabledCanvas = true
+    this.forceUpdate()
+  }
+  disabledIsPainting() {
+    this.state.enabledCanvas = false
+    this.forceUpdate()
+  }
+  onEndDraw(data) {
+    this.state.lineData.push(data)
+    this.state.enabledCanvas = false
     this.forceUpdate()
   }
   render() {
     const { image, index, showIndex } = this.props;
     const { offset, zoom, loading } = this.state;
-    const { rnd_mask_width, rnd_mask_height, enableResizing } = this.state
+    const { rnd_mask_width, rnd_mask_height } = this.state
     const value = `translate3d(${offset.x}px, ${offset.y}px, 0px)`;
     const imageCls = `zoom-${zoom} image-outer ${this.draggable ? 'dragging' : ''}`;
     const caption = (React.createElement("p", { className: "caption" },
       image.title ? React.createElement("span", { className: "title" }, image.title) : null,
       image.title && image.content ? React.createElement("span", null, ` - `) : null,
       image.title ? React.createElement("span", { className: "content" }, image.content) : null));
+
     return (
       <div className="image-wrapper" ref='image-wrapper'>
         <div style={{ transform: value }} ref={(component) => this.imageOuter = component} className={imageCls}>
@@ -254,51 +245,31 @@ class ImageWrapper extends React.Component {
           onMouseMove={this.onMove.bind(this)}
           onMouseDown={this.onMouseDown.bind(this)}
           onMouseUp={this.onMoveEnd.bind(this)} >
-          <div className='rnd-mask' style={{ width: rnd_mask_width, height: rnd_mask_height }} ref="rnd-mask">
-            {this.state.rnd.map((item, index) => {
-              style.transform = `translate(${item.position.x}px, ${item.position.y}px) !important` 
-              console.log(style)
-              return (
-                <Rnd
-                  key={index}
-                  style={style}
-                  //default={item.position}
-                  position={{
-                    x: item.position.x,
-                    y: item.position.y,
-                  }}
-                  size={{
-                    width: item.position.width,
-                    height: item.position.height,
-                  }}
-                  onResize={(e, direction, ref, delta, position) => this.onRndResize(e, direction, ref, delta, position, index)}
-                  onDragStart={(SyntheticMouseEvent, data) => this.onRndDragStart(SyntheticMouseEvent, data, index)}
-                  onDragStop={(e, d) => this.onRndDragStop(e, d, index)}
-                  disableDragging={false}
-                  enableResizing={enableResizing}
-                  minWidth={50}
-                  minHeight={50}
-                >
-                  <div className='rnd' >
-                    <div className='row object-title'>
-                      <div className='object'>Object</div>
-                      <div className='title'>Title</div>
-                      <div className='close' onClick={() => this.delete(index)}>X</div>
-                    </div>
-                    <div className='details'>
-
-                    </div>
-                  </div>
-                </Rnd>
-              )
-            })}
-          </div>
+          {loading ? null : <div className='rnd-mask' style={{ width: rnd_mask_width, height: rnd_mask_height }} ref="rnd-mask">
+            <Canvas
+              drawType={this.state.drawType} //POLYGON || RECTANGLE
+              enabled={this.state.enabledCanvas}
+              onEndDraw={this.onEndDraw.bind(this)}
+              onRef={ref => (this.canvas = ref)}
+              data={{data: this.state.lineData}}
+              //dataChange={this.state.dataChange}
+              activeIndex={this.state.activeIndex}
+              // style
+              width={rnd_mask_width}
+              height={rnd_mask_height}
+              lineWidth={1}
+              strokeStyle={'red'}
+              activeStrokeStyle={'blue'}
+            />
+          </div>}
         </div>
         <div className="rnd_evaluate">
-          {this.state.rnd.map((item, index) => {
+          {this.state.lineData.map((item, index) => {
             return (
-              <div className='row col' key={index}>
-                <input key={index} type='text' value={item.evaluate} onChange={(e) => this.changeElement(e, index)} />
+              <div key={index}>
+                <button className="btn" onClick={() => this.setState({ activeIndex: index })}>{index}</button>
+                <button className="btn" onClick={() => this.delete(index)}>Xóa</button>
+
               </div>
             )
           })}
@@ -309,6 +280,12 @@ class ImageWrapper extends React.Component {
             {caption}
           </div>}
           <div className="button-group">
+            <div className=" button" onClick={this.drawRectangle.bind(this)}>
+              Rec
+            </div>
+            <div className=" button" onClick={this.drawPolygon.bind(this)}>
+              Pol
+            </div>
             <div className=" button" onClick={this.save.bind(this)}>
               Save
             </div>
