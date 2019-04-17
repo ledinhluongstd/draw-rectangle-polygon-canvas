@@ -283,8 +283,8 @@ class ImageWrapper extends React.Component {
           {this.state.lineData.map((item, index) => {
             return (
               <div key={index} style={{ backgroundColor: this.state.activeIndex === index ? 'blue' : 'white' }}>
-                <button className="btn" onClick={() => this.setState({ activeIndex: index })}>{index}</button>
-                <button className="btn" onClick={() => this.delete(index)}>Xóa</button>
+                <div className="btn" onClick={() => this.setState({ activeIndex: index })}>{index}</div>
+                <div className="btn" onClick={() => this.delete(index)}>Xóa</div>
 
               </div>
             )

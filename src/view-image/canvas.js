@@ -18,7 +18,6 @@ class Canvas extends Component {
     this.prevPosPolygon = []
     this.position = {}
   }
-
   onMouseDown({ nativeEvent }) {
     const { offsetX, offsetY } = nativeEvent;
     let checkPointClicked = this.checkPointClicked(offsetX, offsetY)
@@ -150,7 +149,6 @@ class Canvas extends Component {
   }
   endPaintEvent() {
     if (this.isMove) {
-      this.isMove = false
       if (this.posMove.type === "POLYGON") {
         // cộng thêm 2 điểm
         let dataBefore = this.line[this.posMove.index.i].data[this.posMove.index.j - 1] ?
@@ -171,6 +169,7 @@ class Canvas extends Component {
         this.line[this.posMove.index.i].data.splice(this.posMove.index.j, 0, before);
         this.line[this.posMove.index.i].data.splice(this.posMove.index.j + 2, 0, after);
       }
+      this.isMove = false
       this.posMove = { data: {}, index: {} }
       this.props.onEndMove(this.line)
     }
