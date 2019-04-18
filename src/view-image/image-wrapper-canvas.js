@@ -284,7 +284,7 @@ class ImageWrapper extends React.Component {
             return (
               <div key={index} style={{ backgroundColor: this.state.activeIndex === index ? 'blue' : 'white' }}>
                 <div className="btn" onClick={() => this.setState({ activeIndex: index })}>{index}</div>
-                <div className="btn" onClick={() => this.delete(index)}>Dellete</div>
+                <div className="btn" onClick={() => this.delete(index)}>Delete</div>
 
               </div>
             )

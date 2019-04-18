@@ -109,7 +109,7 @@ class Canvas extends Component {
         return
       }
     }
-    // kiểm tra đoạn thẳng cắt nhau
+    // check the straight line intersecting
     let checkIntersecting = false
     if (this.prevPosPolygon.length > 2) {
       let A = { offsetX: offsetX, offsetY: offsetY },
@@ -123,18 +123,18 @@ class Canvas extends Component {
         }
       }
     }
-    // hết kiểm tra
+    // out of check
     if (checkIntersecting) return
     this.prevPosPolygon.push({ offsetX, offsetY });
   }
 
   onMouseMove({ nativeEvent }) {
     const { offsetX, offsetY } = nativeEvent;
-    // di chuyển đối tượng
+    // moving objects
     if (this.objectMove) {
       this.onMouseMoveObject(offsetX, offsetY)
     }
-    // di chuyển điểm
+    // move point
     if (this.movePoint) {
       this.onMouseMovePoint(offsetX, offsetY)
     }
