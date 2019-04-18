@@ -1,4 +1,4 @@
-// đã xong thao tác thêm sửa xóa
+// đã xong thao tác thêm sửa xóa, di chuyển, kiểm tra cắt nhau, di chuyển đối tượng
 import React, { Component } from 'react';
 
 class Canvas extends Component {
@@ -9,6 +9,8 @@ class Canvas extends Component {
     this.endPaintEvent = this.endPaintEvent.bind(this);
     this.onMouseOut = this.onMouseOut.bind(this)
     this.isPainting = false
+    this.objectMove = false
+    this.objectSelected = { check: false, index: 0, data: {} }
     this.isMove = false
     this.posMove = { data: {}, index: {} }
     this.enabled = this.props.enabled
@@ -20,22 +22,54 @@ class Canvas extends Component {
   }
   onMouseDown({ nativeEvent }) {
     const { offsetX, offsetY } = nativeEvent;
-    let checkPointClicked = this.checkPointClicked(offsetX, offsetY)
-    if (checkPointClicked.check) {
-      this.isMove = true
-      this.props.activeIndexChange(checkPointClicked.index.i)
-      this.posMove = {
-        data: checkPointClicked.data,
-        index: checkPointClicked.index,
-        type: checkPointClicked.type,
-        item: checkPointClicked.item
+    // xác định điểm để di chuyển
+    if(!this.objectMove && !this.isPainting){
+      let checkPointClicked = this.checkPointClicked(offsetX, offsetY)
+      if (checkPointClicked.check && !this.objectMove) {
+        this.isMove = true
+        this.props.activeIndexChange(checkPointClicked.index.i)
+        this.posMove = {
+          data: checkPointClicked.data,
+          index: checkPointClicked.index,
+          type: checkPointClicked.type,
+          item: checkPointClicked.item
+        }
+        return
+      } else {
+        if (!this.isPainting && !this.objectMove)
+          this.props.activeIndexChange(-1)
       }
-      return
-    } else {
-      if (!this.isPainting)
-        this.props.activeIndexChange(-1)
     }
 
+    // di chuyển đối tượng
+    if (!this.isPainting && !this.isMove) {
+      for (let i = 0; i < this.line.length; i++) {
+        let item = this.line[i]
+        let polygon = []
+        if (item.type === "POLYGON") {
+          polygon = item.data
+        }
+        if (item.type === "RECTANGLE") {
+          polygon = [
+            { offsetX: item.data.offsetX, offsetY: item.data.offsetY },
+            { offsetX: item.data.offsetX + item.data.width, offsetY: item.data.offsetY },
+            { offsetX: item.data.offsetX + item.data.width, offsetY: item.data.offsetY + item.data.height },
+            { offsetX: item.data.offsetX, offsetY: item.data.offsetY + item.data.height }]
+        }
+        if (this.checkPointInsideObject({ offsetX, offsetY }, polygon)) {
+          this.props.activeIndexChange(i)
+          this.objectSelected = {
+            check: true,
+            index: i,
+            data: item,
+            prevPos: { offsetX: offsetX, offsetY: offsetY }
+          }
+          this.objectMove = true
+          break
+        }
+      }
+    }
+    // vẽ hình
     if (!this.enabled) return
     this.isPainting = true;
     if (this.props.drawType === 'RECTANGLE') {
@@ -54,6 +88,7 @@ class Canvas extends Component {
     }
     if (this.prevPosPolygon[0]) {
       if (this.checkRangePoint(offsetX, offsetY, this.prevPosPolygon[0].offsetX, this.prevPosPolygon[0].offsetY, 10)) {
+        if (this.prevPosPolygon.length < 3) return
         this.line.push({
           type: "POLYGON",
           data: this.prevPosPolygon,
@@ -63,10 +98,45 @@ class Canvas extends Component {
         return
       }
     }
+    // kiểm tra đoạn thẳng cắt nhau
+    let checkIntersecting = false
+    if (this.prevPosPolygon.length > 2) {
+      let A = { offsetX: offsetX, offsetY: offsetY },
+        B = { offsetX: this.prevPosPolygon[this.prevPosPolygon.length - 1].offsetX, offsetY: this.prevPosPolygon[this.prevPosPolygon.length - 1].offsetY }
+      for (let i = 0; i < this.prevPosPolygon.length - 2; i++) {
+        let C = { offsetX: this.prevPosPolygon[i].offsetX, offsetY: this.prevPosPolygon[i].offsetY }
+        let D = { offsetX: this.prevPosPolygon[i + 1].offsetX, offsetY: this.prevPosPolygon[i + 1].offsetY }
+        if (this.checkIntersecting(A, B, C, D)) {
+          alert(this.props.warning)
+          return
+        }
+      }
+    }
+    // hết kiểm tra
+    if (checkIntersecting) return
     this.prevPosPolygon.push({ offsetX, offsetY });
   }
   onMouseMove({ nativeEvent }) {
     const { offsetX, offsetY } = nativeEvent;
+    // di chuyển đối tượng
+    if (this.objectMove) {
+      let item = JSON.parse(JSON.stringify(this.objectSelected.data))
+      let x = offsetX - this.objectSelected.prevPos.offsetX
+      let y = offsetY - this.objectSelected.prevPos.offsetY
+      if (item.type === "POLYGON") {
+        for (let i = 0; i < item.data.length; i++) {
+          item.data[i].offsetX += x
+          item.data[i].offsetY += y
+        }
+      }
+      if (item.type === "RECTANGLE") {
+        item.data.offsetX += x
+        item.data.offsetY += y
+      }
+      this.line[this.objectSelected.index] = item
+      this.drawData()
+    }
+    // di chuyển điểm
     if (this.isMove) {
       let line = JSON.parse(JSON.stringify(this.line))
       if (this.posMove.type === 'POLYGON') {
@@ -148,6 +218,11 @@ class Canvas extends Component {
     this.ctx.closePath();
   }
   endPaintEvent() {
+    if (this.objectMove) {
+      this.objectSelected = { check: false, index: 0, data: {} }
+      this.objectMove = false
+      this.props.onEndMove(this.line)
+    }
     if (this.isMove) {
       if (this.posMove.type === "POLYGON") {
         // cộng thêm 2 điểm
@@ -340,7 +415,41 @@ class Canvas extends Component {
     }
     return { check: check }
   }
+  checkPointInsideObject(point, polygon) {
+    var x = point.offsetX, y = point.offsetY;
+    var inside = false;
+    for (var i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+      var xi = polygon[i].offsetX, yi = polygon[i].offsetY;
+      var xj = polygon[j].offsetX, yj = polygon[j].offsetY;
+      var intersect = ((yi > y) != (yj > y))
+        && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+      if (intersect) inside = !inside;
+    }
+    return inside;
+  };
+  value(A, B, M) {
+    return (M.offsetX - A.offsetX) * (B.offsetY - A.offsetY) - (M.offsetY - A.offsetY) * (B.offsetX - A.offsetX)
+  }
+  otherSide(A, B, C, D) {
+    let t;
+    if (this.value(A, B, C) * this.value(A, B, D) <= 0) {
+      t = 1
+    } else {
+      t = 0
+    }
+    return t
+  }
+  checkIntersecting(A, B, C, D) {
+    if (this.otherSide(A, B, C, D) === 1 && this.otherSide(C, D, A, B) === 1) {
+      return true
+    } else {
+      return false
+    }
+  }
   render() {
+    //let A = { offsetX: 0, offsetY: 0 }, B = { offsetX: 3, offsetY: 4 }, C = { offsetX: 0, offsetY: 4 }, D = { offsetX: 4, offsetY: 0 }
+    //console.log(this.checkIntersecting(A, B, C, D))
+
     return (
       <canvas
         ref={(ref) => (this.canvas = ref)}

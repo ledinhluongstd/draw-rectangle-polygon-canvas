@@ -1,7 +1,7 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { Rnd } from "react-rnd";
-import ReactDOM from 'react-dom';
+//import PropTypes from 'prop-types'
+//import { Rnd } from "react-rnd";
+//import ReactDOM from 'react-dom';
 
 import Canvas from './canvas'
 // import Canvas from './canvas-fabricjs' // vẽ bằng thư viện fabricjs
@@ -243,7 +243,6 @@ class ImageWrapper extends React.Component {
       image.title ? React.createElement("span", { className: "title" }, image.title) : null,
       image.title && image.content ? React.createElement("span", null, ` - `) : null,
       image.title ? React.createElement("span", { className: "content" }, image.content) : null));
-
     return (
       <div className="image-wrapper" ref='image-wrapper'>
         <div style={{ transform: value }} ref={(component) => this.imageOuter = component} className={imageCls}>
@@ -265,9 +264,10 @@ class ImageWrapper extends React.Component {
               enabled={this.state.enabledCanvas}
               onEndDraw={this.onEndDraw.bind(this)}
               onEndMove={this.onEndMove.bind(this)}
+              plusTwoPoint={true}
               onRef={ref => (this.canvas = ref)}
               data={{ data: this.state.lineData }}
-              //dataChange={this.state.dataChange}
+              warning={"Cảnh báo"}
               activeIndex={this.state.activeIndex}
               activeIndexChange={this.activeIndexChange.bind(this)}
               // style
@@ -284,7 +284,7 @@ class ImageWrapper extends React.Component {
             return (
               <div key={index} style={{ backgroundColor: this.state.activeIndex === index ? 'blue' : 'white' }}>
                 <div className="btn" onClick={() => this.setState({ activeIndex: index })}>{index}</div>
-                <div className="btn" onClick={() => this.delete(index)}>Xóa</div>
+                <div className="btn" onClick={() => this.delete(index)}>Dellete</div>
 
               </div>
             )
@@ -309,10 +309,10 @@ class ImageWrapper extends React.Component {
               Add
             </div>
             <div className="zoom-out button" onClick={this.zoomOut.bind(this)}>
-
+              ZoomOut
             </div>
             <div className="zoom-in button" onClick={this.zoomIn.bind(this)}>
-
+              ZoomIn
             </div>
           </div>
         </div>
