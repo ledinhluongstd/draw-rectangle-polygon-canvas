@@ -190,6 +190,11 @@ class ImageWrapper extends React.Component {
     //this.state.dataChange = !this.state.dataChange
     this.forceUpdate()
   }
+  hidden(index) {
+    this.state.lineData[index].display = !this.state.lineData[index].display
+    console.log(this.state.lineData[index].display)
+    this.forceUpdate()
+  }
   loadDataRnd(src) {
     this.state.lineData = []
     this.forceUpdate()
@@ -285,6 +290,7 @@ class ImageWrapper extends React.Component {
               <div key={index} style={{ backgroundColor: this.state.activeIndex === index ? 'blue' : 'white' }}>
                 <div className="btn" onClick={() => this.setState({ activeIndex: index })}>{index}</div>
                 <div className="btn" onClick={() => this.delete(index)}>Delete</div>
+                <div className="btn" onClick={() => this.hidden(index)}>Hidden</div>
 
               </div>
             )

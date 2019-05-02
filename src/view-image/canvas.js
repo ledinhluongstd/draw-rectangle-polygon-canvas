@@ -113,7 +113,8 @@ class Canvas extends Component {
           position: this.prevPosPolygon,
           active: false,
           strokeStyle: this.props.strokeStyle,
-          activeStrokeStyle: this.props.activeStrokeStyle
+          activeStrokeStyle: this.props.activeStrokeStyle,
+          display: true
         })
         this.line.push(polygon)
         this.prevPosPolygon = []
@@ -270,7 +271,8 @@ class Canvas extends Component {
       },
       active: false,
       strokeStyle: this.props.strokeStyle,
-      activeStrokeStyle: this.props.activeStrokeStyle
+      activeStrokeStyle: this.props.activeStrokeStyle,
+      display: true
     })
     rectangle.render(this)
     // let width = this.position.stop.offsetX - this.position.start.offsetX
@@ -357,7 +359,8 @@ class Canvas extends Component {
       },
       active: false,
       strokeStyle: this.props.strokeStyle,
-      activeStrokeStyle: this.props.activeStrokeStyle
+      activeStrokeStyle: this.props.activeStrokeStyle,
+      display: true
     })
     rectangle.render(this)
 
@@ -476,6 +479,8 @@ class Canvas extends Component {
   drawData() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.line.map((item, index) => {
+      item.active = index === this.props.activeIndex
+      // if (item.display)
       item.render(this)
       // let active = index === this.props.activeIndex
       // if (active) this.ctx.strokeStyle = this.props.activeStrokeStyle

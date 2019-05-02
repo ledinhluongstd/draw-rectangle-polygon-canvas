@@ -12,6 +12,7 @@ export default class Polygon {
     this.type = "POLYGON"
     this.active = args.active || false
     this.enableMove = args.enableMove
+    this.display = args.display //|| true
     // this.position = args.position
     // this.velocity = {
     //   x: 0,
@@ -27,10 +28,13 @@ export default class Polygon {
     // this.onDie = args.onDie;
   }
   activeItem(self) {
-    console.log(2)
-    this.active = true
-    this.render(self)
+    // console.log(2)
+    // this.active = true
+    // this.render(self)
     // this.forceUpdate()
+  }
+  destroy() {
+
   }
   // destroy(){
   //   this.delete = true;
@@ -83,8 +87,21 @@ export default class Polygon {
   //   });
   //   this.create(particle, 'particles');
   // }
-
+  checkPointInsideObject(point, polygon) {
+    let x = point.offsetX, y = point.offsetY;
+    let inside = false;
+    for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+      let xi = polygon[i].offsetX, yi = polygon[i].offsetY;
+      let xj = polygon[j].offsetX, yj = polygon[j].offsetY;
+      let intersect = ((yi > y) !== (yj > y))
+        && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+      if (intersect) inside = !inside;
+    }
+    return inside;
+  };
   render(self) {
+    // console.log('222222222222222222222222222222222')
+
     // console.log(this)
     // console.log(self)
     // // Controls
@@ -124,9 +141,12 @@ export default class Polygon {
     // else if (this.position.y < 0) this.position.y = state.screen.height;
 
     // Draw
+    if (!this.display) return null
+
     const context = self.ctx;
     const points = this.position
     let offsetXAvg = 0, offsetYAvg = 0
+    let offsetXText = 0, offsetYText = 0
     // context.save();
     // context.translate(this.position.x, this.position.y);
     // context.rotate(this.rotation * Math.PI / 180);
@@ -137,27 +157,46 @@ export default class Polygon {
 
 
     context.moveTo(points[0].offsetX, points[0].offsetY);
-    offsetXAvg += points[0].offsetX
-    offsetYAvg += points[0].offsetY
+    offsetXAvg += points[0].offsetX / points.length
+    offsetYAvg += points[0].offsetY / points.length
 
     for (let i = 1; i < points.length; i++) {
       let item = points[i]
       context.strokeStyle = this.active ? this.activeStrokeStyle : this.strokeStyle
       context.fillStyle = this.active ? this.activeStrokeStyle : this.strokeStyle
-      context.fillRect(points[i - 1].offsetX - 5, points[i - 1].offsetY - 5, 10, 10);
-      context.fillRect(item.offsetX - 5, item.offsetY - 5, 10, 10);
+      if (this.active) {
+        context.fillRect(points[i - 1].offsetX - 5, points[i - 1].offsetY - 5, 10, 10);
+        context.fillRect(item.offsetX - 5, item.offsetY - 5, 10, 10);
+      }
       context.moveTo(points[i - 1].offsetX, points[i - 1].offsetY);
       context.lineTo(item.offsetX, item.offsetY)
 
-      offsetXAvg += points[i].offsetX
-      offsetYAvg += points[i].offsetY
+      offsetXAvg += points[i].offsetX / points.length
+      offsetYAvg += points[i].offsetY / points.length
 
     }
     context.moveTo(points[points.length - 1].offsetX, points[points.length - 1].offsetY);
     context.lineTo(points[0].offsetX, points[0].offsetY)
 
-    context.font = "15px Arial";
-    context.fillText('Xin chào', offsetXAvg / points.length, offsetYAvg / points.length - 10)
+
+
+    if (this.checkPointInsideObject({ offsetX: offsetXAvg, offsetY: offsetYAvg }, this.position)) {
+      offsetXText = offsetXAvg
+      offsetYText = offsetYAvg
+    } else {
+      offsetXText = points[0].offsetX
+      offsetYText = points[0].offsetY
+    }
+
+    // context.fillRect(offsetXText, offsetYText, 70, 20);
+    context.font = "bold 15px Arial";
+    context.fillRect(offsetXText - (context.measureText("Xin chào").width / 2), offsetYText, context.measureText("Xin chào").width + 15, 20);
+    context.fillStyle = "#ffffff"
+
+    context.fillText('Xin chào', offsetXText - (context.measureText("Xin chào").width / 2) + 5, offsetYText + 15)
+
+    context.fillStyle = this.active ? this.activeStrokeStyle : this.strokeStyle
+
     // context.lineTo(100, 100);
     // context.lineTo(200, 200);
     // context.lineTo(300, 300);

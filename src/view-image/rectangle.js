@@ -12,6 +12,7 @@ export default class Rectangle {
     this.type = "RECTANGLE"
     this.active = args.active || false
     this.enableMove = args.enableMove
+    this.display = args.display //|| true
     // this.position = args.position
     // this.velocity = {
     //   x: 0,
@@ -27,9 +28,9 @@ export default class Rectangle {
     // this.onDie = args.onDie;
   }
   activeItem(self) {
-    console.log(1)
-    this.active = true
-    this.render(self)
+    // console.log(1)
+    // this.active = true
+    // this.render(self)
     // this.forceUpdate()
   }
   // destroy(){
@@ -85,6 +86,7 @@ export default class Rectangle {
   // }
 
   render(self) {
+    // console.log('1111111111111111111111111111111111111111111111111111')
     // console.log(this)
     // console.log(self)
     // // Controls
@@ -124,7 +126,11 @@ export default class Rectangle {
     // else if (this.position.y < 0) this.position.y = state.screen.height;
 
     // Draw
+    if(!this.display) return null
+    // console.log('1111')
     const context = self.ctx;
+    let offsetXAvg = 0, offsetYAvg = 0
+
     // context.save();
     // context.translate(this.position.x, this.position.y);
     // context.rotate(this.rotation * Math.PI / 180);
@@ -135,13 +141,21 @@ export default class Rectangle {
     context.strokeStyle = this.active ? this.activeStrokeStyle : this.strokeStyle
     context.fillStyle = this.active ? this.activeStrokeStyle : this.strokeStyle
     context.rect(this.position.offsetX, this.position.offsetY, this.position.width, this.position.height);
-    context.fillRect(this.position.offsetX - 5, this.position.offsetY - 5, 10, 10);
-    context.fillRect(this.position.offsetX + this.position.width - 5, this.position.offsetY - 5, 10, 10);
-    context.fillRect(this.position.offsetX - 5, this.position.offsetY + this.position.height - 5, 10, 10);
-    context.fillRect(this.position.offsetX + this.position.width - 5, this.position.offsetY + this.position.height - 5, 10, 10);
+    if (this.active) {
+      context.fillRect(this.position.offsetX - 5, this.position.offsetY - 5, 10, 10);
+      context.fillRect(this.position.offsetX + this.position.width - 5, this.position.offsetY - 5, 10, 10);
+      context.fillRect(this.position.offsetX - 5, this.position.offsetY + this.position.height - 5, 10, 10);
+      context.fillRect(this.position.offsetX + this.position.width - 5, this.position.offsetY + this.position.height - 5, 10, 10);
+    }
+    offsetXAvg = this.position.width < 0 ? this.position.offsetX + this.position.width : this.position.offsetX
+    offsetYAvg = this.position.height < 0 ? this.position.offsetY + this.position.height : this.position.offsetY
 
-    context.font = "15px Arial";
-    context.fillText('Xin chào', this.position.offsetX, this.position.offsetY - 10)
+    context.font = "bold 15px Arial";
+    context.fillRect(offsetXAvg, offsetYAvg, context.measureText("Xin chào").width + 15, 20);
+    context.fillStyle = "#ffffff"
+    context.fillText('Xin chào', offsetXAvg + 5, offsetYAvg + 15)
+    context.fillStyle = this.active ? this.activeStrokeStyle : this.strokeStyle
+
     // context.lineTo(100, 100);
     // context.lineTo(200, 200);
     // context.lineTo(300, 300);
