@@ -2,14 +2,14 @@
 // import Particle from './Particle';
 // import { rotatePoint, randomNumBetween } from './helpers';
 
-export default class Rectangle {
+export default class Polygon {
   constructor(args) {
     // console.log(args)
     this.position = args.position
     this.active = args.active
     this.activeStrokeStyle = args.activeStrokeStyle
     this.strokeStyle = args.strokeStyle
-    this.type = "RECTANGLE"
+    this.type = "POLYGON"
     this.active = args.active || false
     this.enableMove = args.enableMove
     // this.position = args.position
@@ -27,7 +27,7 @@ export default class Rectangle {
     // this.onDie = args.onDie;
   }
   activeItem(self) {
-    console.log(1)
+    console.log(2)
     this.active = true
     this.render(self)
     // this.forceUpdate()
@@ -125,6 +125,8 @@ export default class Rectangle {
 
     // Draw
     const context = self.ctx;
+    const points = this.position
+    let offsetXAvg = 0, offsetYAvg = 0
     // context.save();
     // context.translate(this.position.x, this.position.y);
     // context.rotate(this.rotation * Math.PI / 180);
@@ -132,16 +134,30 @@ export default class Rectangle {
     //context.fillStyle = '#000000';
     //context.lineWidth = 2;
     context.beginPath();
-    context.strokeStyle = this.active ? this.activeStrokeStyle : this.strokeStyle
-    context.fillStyle = this.active ? this.activeStrokeStyle : this.strokeStyle
-    context.rect(this.position.offsetX, this.position.offsetY, this.position.width, this.position.height);
-    context.fillRect(this.position.offsetX - 5, this.position.offsetY - 5, 10, 10);
-    context.fillRect(this.position.offsetX + this.position.width - 5, this.position.offsetY - 5, 10, 10);
-    context.fillRect(this.position.offsetX - 5, this.position.offsetY + this.position.height - 5, 10, 10);
-    context.fillRect(this.position.offsetX + this.position.width - 5, this.position.offsetY + this.position.height - 5, 10, 10);
+
+
+    context.moveTo(points[0].offsetX, points[0].offsetY);
+    offsetXAvg += points[0].offsetX
+    offsetYAvg += points[0].offsetY
+
+    for (let i = 1; i < points.length; i++) {
+      let item = points[i]
+      context.strokeStyle = this.active ? this.activeStrokeStyle : this.strokeStyle
+      context.fillStyle = this.active ? this.activeStrokeStyle : this.strokeStyle
+      context.fillRect(points[i - 1].offsetX - 5, points[i - 1].offsetY - 5, 10, 10);
+      context.fillRect(item.offsetX - 5, item.offsetY - 5, 10, 10);
+      context.moveTo(points[i - 1].offsetX, points[i - 1].offsetY);
+      context.lineTo(item.offsetX, item.offsetY)
+
+      offsetXAvg += points[i].offsetX
+      offsetYAvg += points[i].offsetY
+
+    }
+    context.moveTo(points[points.length - 1].offsetX, points[points.length - 1].offsetY);
+    context.lineTo(points[0].offsetX, points[0].offsetY)
 
     context.font = "15px Arial";
-    context.fillText('Xin chào', this.position.offsetX, this.position.offsetY - 10)
+    context.fillText('Xin chào', offsetXAvg / points.length, offsetYAvg / points.length - 10)
     // context.lineTo(100, 100);
     // context.lineTo(200, 200);
     // context.lineTo(300, 300);
