@@ -1,21 +1,7 @@
 import React from 'react'
-//import PropTypes from 'prop-types'
-//import { Rnd } from "react-rnd";
-//import ReactDOM from 'react-dom';
-
 import Canvas from './canvas'
-// import Canvas from './canvas-fabricjs' // vẽ bằng thư viện fabricjs
-//import Canvas from './canvas-polygon' // vẽ polygon ok
-//import Canvas from './canvas-rectangle' // vẽ rectangle ok
-//import Canvas from './canvas-polygon-reactangle' // vẽ polygon và rectangle ok
-
 const constants_1 = require("./constants");
-const style = {
-  display: "flex",
-  border: "solid 1px #ddd",
-  background: "transparent",
-  zIndex: 1000
-};
+
 class ImageWrapper extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -187,12 +173,10 @@ class ImageWrapper extends React.Component {
   }
   delete(index) {
     this.state.lineData.splice(index, 1)
-    //this.state.dataChange = !this.state.dataChange
     this.forceUpdate()
   }
   hidden(index) {
     this.state.lineData[index].display = !this.state.lineData[index].display
-    console.log(this.state.lineData[index].display)
     this.forceUpdate()
   }
   loadDataRnd(src) {
@@ -249,79 +233,82 @@ class ImageWrapper extends React.Component {
       image.title && image.content ? React.createElement("span", null, ` - `) : null,
       image.title ? React.createElement("span", { className: "content" }, image.content) : null));
     return (
-      <div className="image-wrapper" ref='image-wrapper'>
-        <div style={{ transform: value }} ref={(component) => this.imageOuter = component} className={imageCls}>
-          {loading ? <div className="spinner">
-            <div className="bounce">
-            </div>
-          </div> : <img className="image" ref={(component) => this.image = component}
-            src={image.src} draggable={false}
-            onDragStart={(e) => e.preventDefault()} onMouseMove={this.onMove.bind(this)} onMouseDown={this.onMouseDown.bind(this)} onMouseUp={this.onMoveEnd.bind(this)} />}
-        </div>
-        <div className={'rnd-container ' + imageCls} style={{ transform: value }}
-          onDragStart={(e) => e.preventDefault()}
-          onMouseMove={this.onMove.bind(this)}
-          onMouseDown={this.onMouseDown.bind(this)}
-          onMouseUp={this.onMoveEnd.bind(this)} >
-          {loading ? null : <div className='rnd-mask' style={{ width: rnd_mask_width, height: rnd_mask_height }} ref="rnd-mask">
-            <Canvas
-              drawType={this.state.drawType} //POLYGON || RECTANGLE
-              enabled={this.state.enabledCanvas}
-              onEndDraw={this.onEndDraw.bind(this)}
-              onEndMove={this.onEndMove.bind(this)}
-              plusTwoPoint={true}
-              onRef={ref => (this.canvas = ref)}
-              data={{ data: this.state.lineData }}
-              warning={"Cảnh báo"}
-              activeIndex={this.state.activeIndex}
-              activeIndexChange={this.activeIndexChange.bind(this)}
-              // style
-              width={rnd_mask_width}
-              height={rnd_mask_height}
-              lineWidth={1}
-              strokeStyle={'red'}
-              activeStrokeStyle={'blue'}
-            />
-          </div>}
-        </div>
-        <div className="rnd_evaluate">
+      <div>
+        <div className="rnd_evaluate col-md-2">
           {this.state.lineData.map((item, index) => {
             return (
               <div key={index} style={{ backgroundColor: this.state.activeIndex === index ? 'blue' : 'white' }}>
                 <div className="btn" onClick={() => this.setState({ activeIndex: index })}>{index}</div>
                 <div className="btn" onClick={() => this.delete(index)}>Delete</div>
                 <div className="btn" onClick={() => this.hidden(index)}>Hidden</div>
-
               </div>
             )
           })}
         </div>
-        <div className="tool-bar">
-          {showIndex && <div className="index-indicator">
-            {index}
-            {caption}
-          </div>}
-          <div className="button-group">
-            <div className=" button" onClick={this.drawRectangle.bind(this)}>
-              Rec
+
+        <div className="image-wrapper col-md-10" ref='image-wrapper'>
+          <div style={{ transform: value }} ref={(component) => this.imageOuter = component} className={imageCls}>
+            {loading ? <div className="spinner">
+              <div className="bounce">
+              </div>
+            </div> : <img className="image" ref={(component) => this.image = component}
+              src={image.src} draggable={false}
+              onDragStart={(e) => e.preventDefault()} onMouseMove={this.onMove.bind(this)} onMouseDown={this.onMouseDown.bind(this)} onMouseUp={this.onMoveEnd.bind(this)} />}
+          </div>
+          <div className={'rnd-container ' + imageCls} style={{ transform: value }}
+            onDragStart={(e) => e.preventDefault()}
+            onMouseMove={this.onMove.bind(this)}
+            onMouseDown={this.onMouseDown.bind(this)}
+            onMouseUp={this.onMoveEnd.bind(this)} >
+            {loading ? null : <div className='rnd-mask' style={{ width: rnd_mask_width, height: rnd_mask_height }} ref="rnd-mask">
+              <Canvas
+                drawType={this.state.drawType} //POLYGON || RECTANGLE
+                enabled={this.state.enabledCanvas}
+                onEndDraw={this.onEndDraw.bind(this)}
+                onEndMove={this.onEndMove.bind(this)}
+                plusTwoPoint={true}
+                onRef={ref => (this.canvas = ref)}
+                data={{ data: this.state.lineData }}
+                warning={"Cảnh báo"}
+                activeIndex={this.state.activeIndex}
+                activeIndexChange={this.activeIndexChange.bind(this)}
+                // style
+                width={rnd_mask_width}
+                height={rnd_mask_height}
+                lineWidth={1}
+                strokeStyle={'red'}
+                activeStrokeStyle={'blue'}
+              />
+            </div>}
+          </div>
+          <div className="tool-bar">
+            {showIndex && <div className="index-indicator">
+              {index}
+              {caption}
+            </div>}
+            <div className="button-group">
+              <div className=" button" onClick={this.drawRectangle.bind(this)}>
+                Rectangle
             </div>
-            <div className=" button" onClick={this.drawPolygon.bind(this)}>
-              Pol
+              <div className=" button" onClick={this.drawPolygon.bind(this)}>
+                Polygon
             </div>
-            <div className=" button" onClick={this.save.bind(this)}>
-              Save
+              <div className=" button" onClick={this.save.bind(this)}>
+                Save
             </div>
-            <div className=" button" onClick={this.addNote.bind(this)}>
+              {/* <div className=" button" onClick={this.addNote.bind(this)}>
               Add
+            </div> */}
+              <div className="zoom-out button" onClick={this.zoomOut.bind(this)}>
+                ZoomOut
             </div>
-            <div className="zoom-out button" onClick={this.zoomOut.bind(this)}>
-              ZoomOut
+              <div className="zoom-in button" onClick={this.zoomIn.bind(this)}>
+                ZoomIn
             </div>
-            <div className="zoom-in button" onClick={this.zoomIn.bind(this)}>
-              ZoomIn
             </div>
           </div>
         </div>
+
       </div>
     )
   }

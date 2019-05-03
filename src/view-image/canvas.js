@@ -164,6 +164,10 @@ class Canvas extends Component {
     }
   }
   onMouseMoveCursor(offsetX, offsetY) {
+    if (this.props.enabled) {
+      this.canvas.style.cursor = 'crosshair'
+      return
+    }
     for (let i = 0; i < this.line.length; i++) {
       let item = this.line[i]
       let polygon = []
@@ -290,8 +294,9 @@ class Canvas extends Component {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.beginPath();
     this.line.map(item => {
-      if (item.type === 'POLYGON') this.onDrawPolygon(item.position)
-      if (item.type === 'RECTANGLE') this.onDrawRectangle(item.position)
+      item.render(this)
+      // if (item.type === 'POLYGON') this.onDrawPolygon(item.position)
+      // if (item.type === 'RECTANGLE') this.onDrawRectangle(item.position)
     })
     this.onDrawPolyline(this.prevPosPolygon)
     this.ctx.moveTo(this.prevPosPolygon[this.prevPosPolygon.length - 1].offsetX, this.prevPosPolygon[this.prevPosPolygon.length - 1].offsetY);
@@ -373,8 +378,9 @@ class Canvas extends Component {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.beginPath();
     this.line.map(item => {
-      if (item.type === 'POLYGON') this.onDrawPolygon(item.position)
-      if (item.type === 'RECTANGLE') this.onDrawRectangle(item.position)
+      item.render(this)
+      // if (item.type === 'POLYGON') this.onDrawPolygon(item.position)
+      // if (item.type === 'RECTANGLE') this.onDrawRectangle(item.position)
     })
     this.ctx.stroke()
     this.ctx.closePath();

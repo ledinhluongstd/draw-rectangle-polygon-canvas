@@ -214,6 +214,18 @@ class ImageViewer extends React.Component {
     const { images, showIndex, prefixCls } = this.props;
     const { activeIndex } = this.state;
     const indicatorVisible = images.length > 1;
+    return (
+      <div className={`react-image-viewer ${prefixCls}-image-viewer`} ref={(component) => this.container = component}>
+        <ImageWrapper showIndex={showIndex}
+          index={`${activeIndex + 1}/${images.length}`}
+          image={images[activeIndex]} />
+        {indicatorVisible ? <div className="direction-control-button">
+          <div className="indicators">
+            {indicatorVisible && this.renderIndicators(images)}
+          </div>
+        </div> : null}
+      </div>
+    )
 
 
     return (React.createElement("div", { className: `react-image-viewer ${prefixCls}-image-viewer`, ref: (component) => this.container = component },

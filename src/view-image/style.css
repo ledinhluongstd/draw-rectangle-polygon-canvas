@@ -12,11 +12,12 @@
   text-align: center;
 }
 .rnd_evaluate{
-  position: absolute;
-  display: inline-block;
-  left: 0;
-  top: 50px;
+  position: relative;
+  /* display: inline-block; */
+  /* left: 0; */
+  top: 4rem;
   overflow: hidden;
+  float: left !important;
 }
 .rnd-container:before{
   content: "";
@@ -174,10 +175,12 @@
 }
 .react-image-viewer .image-wrapper {
   position: relative;
-  width: 92vw;
+  /* width: 92vw; */
   height: 92vh;
-  margin: 4vh 4vw;
+  margin: 4rem 0;
   overflow: hidden;
+  background-color: black;
+  float: right !important;
 }
 .react-image-viewer .image-outer {
   position: absolute;
@@ -469,8 +472,8 @@
   transform-origin: 0 100%;
 }
 .react-image-viewer .direction-control-button .button .bar:before {
-  -webkit-transform: rotate(45deg);
-  transform: rotate(45deg);
+  /* -webkit-transform: rotate(45deg);
+  transform: rotate(45deg); */
 }
 .react-image-viewer .direction-control-button .button .bar:after {
   -webkit-transform: rotate(135deg);
@@ -486,13 +489,13 @@
   text-align: center;
   margin: .86rem 2rem;
   opacity: .5;
-  border: .14rem solid #fff;
-  border-radius: 50%;
+  /* border: .14rem solid #fff; */
+  /* border-radius: 50%; */
   color: white
 }
 .react-image-viewer .button-group .button:before,
 .react-image-viewer .button-group .button:after {
-  content: '';
+  /* content: '';
   display: block;
   position: absolute;
   height: 1.6rem;
@@ -504,7 +507,7 @@
   -webkit-transform-origin: center;
   transform-origin: center;
   -webkit-transform: rotate(90deg);
-  transform: rotate(90deg);
+  transform: rotate(90deg); */
 }
 .react-image-viewer .button-group .zoom-in:after {
   -webkit-transform: rotate(0deg);
